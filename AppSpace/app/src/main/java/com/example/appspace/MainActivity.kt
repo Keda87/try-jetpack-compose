@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -95,17 +95,18 @@ fun AppSpaceScreen() {
 
 @Composable
 fun ImageComponent(@DrawableRes resId: Int, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.padding(bottom = 50.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Card(
+        elevation = 3.dp,
+        border = BorderStroke(2.dp, Color.Gray),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(10.dp)
     ) {
         Image(
             painter = painterResource(id = resId),
             contentDescription = null,
             modifier = modifier
-                .padding(10.dp)
-                .border(2.dp, Color.Gray)
+                .padding(50.dp)
         )
     }
 }
