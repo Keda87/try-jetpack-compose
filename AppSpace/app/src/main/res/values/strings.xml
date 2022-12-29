@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">App Space</string>
+    <string name="button_next">Next</string>
+    <string name="button_previous">Previous</string>
+    <string name="text_year">(%s)</string>
+
+    <string name="img1_title">Princess, (later Queen), Victoria, aged 4</string>
+    <string name="img1_by">Engraver</string>
+    <string name="img1_year">1832</string>
+
+    <string name="img2_title">Portrait of E. Magawley Banon</string>
+    <string name="img2_by">Dermod O\'Brien</string>
+    <string name="img2_year">1865</string>
+
+    <string name="img3_title">Founding Member and Secretary to the Dublin Society</string>
+    <string name="img3_by">Charles Spooner</string>
+    <string name="img3_year">1720</string>
+</resources>
