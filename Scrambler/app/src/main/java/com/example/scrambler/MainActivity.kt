@@ -11,6 +11,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -19,6 +21,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.scrambler.ui.GameViewModel
 import com.example.scrambler.ui.theme.ScramblerTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +43,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun GameScreen(modifier: Modifier = Modifier) {
+fun GameScreen(
+    modifier: Modifier = Modifier,
+    gameViewModel: GameViewModel = viewModel()
+) {
+    val gameUiState by gameViewModel.uiState.collectAsState()
+
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
@@ -47,7 +56,12 @@ fun GameScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         GameStatus()
-        GameLayout()
+        GameLayout(
+            onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
+            userGuess = gameViewModel.userGuess,
+            onKeyboardDone = { },
+            currentWord = gameUiState.currentScrabbleWord
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -97,10 +111,16 @@ fun GameStatus(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun GameLayout(modifier: Modifier = Modifier) {
+fun GameLayout(
+    onUserGuessChanged: (String) -> Unit,
+    userGuess: String,
+    onKeyboardDone: () -> Unit,
+    currentWord: String,
+    modifier: Modifier = Modifier
+) {
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
         Text(
-            text = "",
+            text = currentWord,
             fontSize = 45.sp,
             modifier = modifier.align(Alignment.CenterHorizontally)
         )
@@ -110,10 +130,10 @@ fun GameLayout(modifier: Modifier = Modifier) {
             modifier = modifier.align(Alignment.CenterHorizontally)
         )
         OutlinedTextField(
-            value = "",
+            value = userGuess,
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            onValueChange = {},
+            onValueChange = onUserGuessChanged,
             label = {
                 Text(text = stringResource(id = R.string.enter_your_word))
             },
@@ -121,9 +141,9 @@ fun GameLayout(modifier: Modifier = Modifier) {
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
             ),
-            keyboardActions = KeyboardActions(
-                onDone = {}
-            )
+            keyboardActions = KeyboardActions(onDone = {
+                onKeyboardDone()
+            })
         )
     }
 }
