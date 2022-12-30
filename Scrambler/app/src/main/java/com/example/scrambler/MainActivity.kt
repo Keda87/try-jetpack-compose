@@ -55,7 +55,10 @@ fun GameScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        GameStatus()
+        GameStatus(
+            wordCount = gameUiState.currentWordCount,
+            score = gameUiState.score,
+        )
         GameLayout(
             onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
             userGuess = gameViewModel.userGuess,
@@ -69,7 +72,7 @@ fun GameScreen(
                 .padding(top = 16.dp)
         ) {
             OutlinedButton(
-                onClick = { },
+                onClick = { gameViewModel.skipWord() },
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp)
@@ -86,11 +89,24 @@ fun GameScreen(
                 Text(text = stringResource(id = R.string.submit))
             }
         }
+
+        if (gameUiState.isGameOver) {
+            FinalScoreDialog(
+                score = gameUiState.score,
+                onPlayAgain = {
+                    gameViewModel.resetGame()
+                }
+            )
+        }
     }
 }
 
 @Composable
-fun GameStatus(modifier: Modifier = Modifier) {
+fun GameStatus(
+    wordCount: Int,
+    score: Int,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -98,11 +114,11 @@ fun GameStatus(modifier: Modifier = Modifier) {
             .size(48.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.word_count, 0),
+            text = stringResource(id = R.string.word_count, wordCount),
             fontSize = 18.sp
         )
         Text(
-            text = stringResource(id = R.string.score, 0),
+            text = stringResource(id = R.string.score, score),
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.End),
@@ -156,6 +172,7 @@ fun GameLayout(
 
 @Composable
 private fun FinalScoreDialog(
+    score: Int,
     onPlayAgain: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -167,7 +184,7 @@ private fun FinalScoreDialog(
             Text(text = stringResource(id = R.string.congratulations))
         },
         text = {
-            Text(text = stringResource(id = R.string.you_scored, 0))
+            Text(text = stringResource(id = R.string.you_scored, score))
         },
         modifier = modifier,
         dismissButton = {
