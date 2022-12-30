@@ -8,6 +8,7 @@ import com.example.scrambler.data.allWords
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 
 class GameViewModel : ViewModel() {
@@ -54,5 +55,14 @@ class GameViewModel : ViewModel() {
 
     fun updateUserGuess(guess: String) {
         userGuess = guess
+    }
+
+    fun checkUserGuess() {
+        if (userGuess.equals(currentWord, ignoreCase = true)) {
+        } else {
+            _uiState.update { it.copy(isGuessedWordWrong = true) }
+        }
+
+        updateUserGuess("")
     }
 }

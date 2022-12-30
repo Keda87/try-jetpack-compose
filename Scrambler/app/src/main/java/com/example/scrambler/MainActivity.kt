@@ -59,7 +59,8 @@ fun GameScreen(
         GameLayout(
             onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
             userGuess = gameViewModel.userGuess,
-            onKeyboardDone = { },
+            isGuessWrong = gameUiState.isGuessedWordWrong,
+            onKeyboardDone = { gameViewModel.checkUserGuess() },
             currentWord = gameUiState.currentScrabbleWord
         )
         Row(
@@ -76,7 +77,7 @@ fun GameScreen(
                 Text(text = stringResource(id = R.string.skip))
             }
             Button(
-                onClick = { },
+                onClick = { gameViewModel.checkUserGuess() },
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp)
@@ -114,6 +115,7 @@ fun GameStatus(modifier: Modifier = Modifier) {
 fun GameLayout(
     onUserGuessChanged: (String) -> Unit,
     userGuess: String,
+    isGuessWrong: Boolean,
     onKeyboardDone: () -> Unit,
     currentWord: String,
     modifier: Modifier = Modifier
@@ -135,9 +137,13 @@ fun GameLayout(
             modifier = Modifier.fillMaxWidth(),
             onValueChange = onUserGuessChanged,
             label = {
-                Text(text = stringResource(id = R.string.enter_your_word))
+                if (isGuessWrong) {
+                    Text(text = stringResource(id = R.string.wrong_guess))
+                } else {
+                    Text(text = stringResource(id = R.string.enter_your_word))
+                }
             },
-            isError = false,
+            isError = isGuessWrong,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
             ),
