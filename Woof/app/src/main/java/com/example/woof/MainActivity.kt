@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,10 +42,40 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun WoofApp(dogs: List<Dog>) {
-    LazyColumn {
-        items(dogs) {
-            DogItemComponent(dog = it)
+    Scaffold(
+        topBar = {
+            WoofTopBar()
         }
+    ) {
+        LazyColumn {
+            items(dogs) {
+                DogItemComponent(dog = it)
+            }
+        }
+    }
+
+}
+
+@Composable
+fun WoofTopBar() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colors.primary),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_woof_logo),
+            contentDescription = stringResource(id = R.string.app_name),
+            modifier = Modifier
+                .size(64.dp)
+                .padding(8.dp)
+        )
+        Text(
+            text = stringResource(R.string.app_name),
+            style = MaterialTheme.typography.h1
+        )
+
     }
 }
 
@@ -96,7 +123,7 @@ fun DogItemComponent(dog: Dog) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    WoofTheme() {
+    WoofTheme(darkTheme = true) {
         WoofApp(dogs = Datasource.loadDogs())
     }
 }
