@@ -1,12 +1,15 @@
 package com.example.cupcake.ui.screen
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -15,16 +18,35 @@ import com.example.cupcake.R
 import com.example.cupcake.ui.screen.component.SubTotalComponent
 
 @Composable
-fun SelectOptionScreen(options: List<Int>, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.fillMaxWidth()) {
+fun SelectOptionScreen(
+    onSelectionChanged: (String) -> Unit,
+    onNextClicked: () -> Unit,
+    onCancelClicked: () -> Unit,
+    subTotal: String,
+    options: List<String>,
+    modifier: Modifier = Modifier
+) {
+    var selectedValue by rememberSaveable { mutableStateOf("") }
+
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
         options.forEach {
-            RadioWithText(isSelected = false, onClick = { /*TODO*/ }, textResId = it)
+            RadioWithText(
+                label = it,
+                isSelected = selectedValue == it,
+                onClick = {
+                    selectedValue = it
+                    onSelectionChanged(selectedValue)
+                },
+            )
         }
         Divider(thickness = 3.dp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-        SubTotalComponent(total = 100, modifier = Modifier.align(Alignment.End))
+        SubTotalComponent(total = subTotal, modifier = Modifier.align(Alignment.End))
         ButtonChooseActionButton(
-            onCancelClicked = {},
-            onNextClicked = {}
+            nextButtonEnabled = selectedValue.isNotEmpty(),
+            onCancelClicked = onCancelClicked,
+            onNextClicked = onNextClicked
         )
     }
 }
@@ -33,7 +55,7 @@ fun SelectOptionScreen(options: List<Int>, modifier: Modifier = Modifier) {
 fun RadioWithText(
     isSelected: Boolean,
     onClick: () -> Unit,
-    @StringRes textResId: Int,
+    label: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -41,12 +63,13 @@ fun RadioWithText(
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(selected = isSelected, onClick = onClick)
-        Text(text = stringResource(id = textResId))
+        Text(text = label)
     }
 }
 
 @Composable
 fun ButtonChooseActionButton(
+    nextButtonEnabled: Boolean,
     onCancelClicked: () -> Unit,
     onNextClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -66,6 +89,7 @@ fun ButtonChooseActionButton(
             Text(text = stringResource(id = R.string.cancel))
         }
         Button(
+            enabled = nextButtonEnabled,
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 2.5.dp),

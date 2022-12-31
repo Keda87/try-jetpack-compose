@@ -11,11 +11,9 @@ import com.example.cupcake.R
 import java.text.NumberFormat
 
 @Composable
-fun SubTotalComponent(total: Int, modifier: Modifier = Modifier) {
-    val totalStr = NumberFormat.getCurrencyInstance().format(total)
-
+fun SubTotalComponent(total: String, modifier: Modifier = Modifier) {
     Text(
-        text = stringResource(id = R.string.subtotal_price, totalStr),
+        text = stringResource(id = R.string.subtotal_price, total),
         modifier = modifier
             .padding(top = 10.dp, bottom = 10.dp, start = 5.dp, end = 5.dp),
         fontWeight = FontWeight.Bold

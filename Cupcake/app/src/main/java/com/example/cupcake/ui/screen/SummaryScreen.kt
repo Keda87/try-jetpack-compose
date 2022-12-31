@@ -17,18 +17,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.cupcake.R
 import com.example.cupcake.ui.screen.component.SubTotalComponent
+import com.example.cupcake.ui.state.OrderUiState
 
 @Composable
-fun SummaryScreen(modifier: Modifier = Modifier) {
+fun SummaryScreen(
+    data: OrderUiState,
+    onCancelClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .fillMaxSize()
     ) {
-        ItemDetailComponent(labelResId = R.string.quantity, value = String.format("%d", 10))
-        ItemDetailComponent(labelResId = R.string.flavor, value = String.format("%d", 10))
-        ItemDetailComponent(labelResId = R.string.pickup_date, value = String.format("%d", 10))
-        SubTotalComponent(total = 100, modifier = Modifier.align(Alignment.End))
+        ItemDetailComponent(
+            labelResId = R.string.quantity,
+            value = String.format("%d", data.quantity)
+        )
+        ItemDetailComponent(
+            labelResId = R.string.flavor,
+            value = data.flavor
+        )
+        ItemDetailComponent(
+            labelResId = R.string.pickup_date,
+            value = data.pickupDate
+        )
+        SubTotalComponent(total = data.price, modifier = Modifier.align(Alignment.End))
         Button(
             onClick = { },
             modifier = Modifier
@@ -38,7 +52,7 @@ fun SummaryScreen(modifier: Modifier = Modifier) {
             Text(text = stringResource(id = R.string.send))
         }
         OutlinedButton(
-            onClick = { /*TODO*/ },
+            onClick = onCancelClicked,
             modifier = Modifier
                 .padding(start = 5.dp, end = 5.dp)
                 .fillMaxWidth()
