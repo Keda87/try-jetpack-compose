@@ -18,63 +18,14 @@ class GameViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(GameUiState())
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
 
-    private lateinit var currentWord: String
-    private var usedWords: MutableSet<String> = mutableSetOf()
     var userGuess by mutableStateOf("")
         private set
 
+    private var usedWords: MutableSet<String> = mutableSetOf()
+    private lateinit var currentWord: String
+
     init {
         resetGame()
-    }
-
-    private fun pickRandomWordAndShuffle(): String {
-        currentWord = allWords.random()
-
-        if (usedWords.contains(currentWord)) {
-            return pickRandomWordAndShuffle()
-        } else {
-            usedWords.add(currentWord)
-            return shuffleCurrentWord(currentWord)
-        }
-    }
-
-    private fun shuffleCurrentWord(word: String): String {
-        val tempWord = word.toCharArray()
-
-        tempWord.shuffle()
-
-        while (String(tempWord) == word) {
-            tempWord.shuffle()
-        }
-
-        return String(tempWord)
-    }
-
-    private fun updateGameState(updatedScore: Int) {
-        if (usedWords.size == MAX_NO_OF_WORDS) {
-            _uiState.update {
-                it.copy(
-                    isGuessedWordWrong = false,
-                    score = updatedScore,
-                    currentWordCount = it.currentWordCount.inc(),
-                    isGameOver = true
-                )
-            }
-        } else {
-            _uiState.update {
-                it.copy(
-                    isGuessedWordWrong = false,
-                    currentScrabbleWord = pickRandomWordAndShuffle(),
-                    score = updatedScore,
-                    currentWordCount = it.currentWordCount.inc()
-                )
-            }
-        }
-    }
-
-    fun skipWord() {
-        updateGameState(_uiState.value.score)
-        updateUserGuess("")
     }
 
     fun resetGame() {
@@ -95,5 +46,54 @@ class GameViewModel : ViewModel() {
         }
 
         updateUserGuess("")
+    }
+
+    fun skipWord() {
+        updateGameState(_uiState.value.score)
+        updateUserGuess("")
+    }
+
+    private fun updateGameState(updatedScore: Int) {
+        if (usedWords.size == MAX_NO_OF_WORDS) {
+            _uiState.update {
+                it.copy(
+                    isGuessedWordWrong = false,
+                    score = updatedScore,
+                    isGameOver = true
+                )
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    isGuessedWordWrong = false,
+                    currentScrabbleWord = pickRandomWordAndShuffle(),
+                    score = updatedScore,
+                    currentWordCount = it.currentWordCount.inc()
+                )
+            }
+        }
+    }
+
+    private fun shuffleCurrentWord(word: String): String {
+        val tempWord = word.toCharArray()
+
+        tempWord.shuffle()
+
+        while (String(tempWord) == word) {
+            tempWord.shuffle()
+        }
+
+        return String(tempWord)
+    }
+
+    private fun pickRandomWordAndShuffle(): String {
+        currentWord = allWords.random()
+
+        if (usedWords.contains(currentWord)) {
+            return pickRandomWordAndShuffle()
+        } else {
+            usedWords.add(currentWord)
+            return shuffleCurrentWord(currentWord)
+        }
     }
 }
