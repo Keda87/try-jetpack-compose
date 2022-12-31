@@ -93,7 +93,7 @@ fun CupCakeTopBar(
 @Composable
 fun DefaultPreview() {
     CupcakeTheme {
-        OrderScreen()
+        SelectOptionScreen(options = listOf(R.string.vanilla))
     }
 }
 

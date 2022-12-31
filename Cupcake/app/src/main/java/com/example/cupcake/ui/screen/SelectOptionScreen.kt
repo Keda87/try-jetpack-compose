@@ -10,32 +10,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.cupcake.R
+import com.example.cupcake.ui.screen.component.SubTotalComponent
 
 @Composable
-fun ChooseFlavorScreen(modifier: Modifier = Modifier) {
-
+fun SelectOptionScreen(options: List<Int>, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
-        RadioWithText(isSelected = false, onClick = { /*TODO*/ }, textResId = R.string.vanilla)
-        RadioWithText(isSelected = true, onClick = { /*TODO*/ }, textResId = R.string.chocolate)
-        RadioWithText(isSelected = false, onClick = { /*TODO*/ }, textResId = R.string.red_velvet)
-        RadioWithText(
-            isSelected = false,
-            onClick = { /*TODO*/ },
-            textResId = R.string.salted_caramel
-        )
-        RadioWithText(isSelected = false, onClick = { /*TODO*/ }, textResId = R.string.coffee)
+        options.forEach {
+            RadioWithText(isSelected = false, onClick = { /*TODO*/ }, textResId = it)
+        }
         Divider(thickness = 3.dp, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
-        Text(
-            text = stringResource(id = R.string.subtotal_price, 100),
-            modifier = Modifier
-                .padding(top = 10.dp, bottom = 10.dp, start = 5.dp, end = 5.dp)
-                .align(Alignment.End),
-            fontWeight = FontWeight.Bold
+        SubTotalComponent(total = 100, modifier = Modifier.align(Alignment.End))
+        ButtonChooseActionButton(
+            onCancelClicked = {},
+            onNextClicked = {}
         )
-        ButtonChooseActionFlavor()
     }
 }
 
@@ -56,7 +46,11 @@ fun RadioWithText(
 }
 
 @Composable
-fun ButtonChooseActionFlavor(modifier: Modifier = Modifier) {
+fun ButtonChooseActionButton(
+    onCancelClicked: () -> Unit,
+    onNextClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .padding(start = 5.dp, end = 5.dp)
@@ -67,14 +61,16 @@ fun ButtonChooseActionFlavor(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 2.5.dp),
-            onClick = { /*TODO*/ }) {
+            onClick = onCancelClicked
+        ) {
             Text(text = stringResource(id = R.string.cancel))
         }
         Button(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 2.5.dp),
-            onClick = { /*TODO*/ }) {
+            onClick = onNextClicked
+        ) {
             Text(text = stringResource(id = R.string.next))
         }
     }
