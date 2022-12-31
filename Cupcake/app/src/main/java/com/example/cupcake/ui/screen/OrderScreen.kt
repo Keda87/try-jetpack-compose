@@ -58,7 +58,7 @@ fun ButtonQuantity(
 @Composable
 fun DefaultPreview() {
     CupcakeTheme {
-        OrderScreen()
+        ChooseFlavorScreen()
     }
 }
 
