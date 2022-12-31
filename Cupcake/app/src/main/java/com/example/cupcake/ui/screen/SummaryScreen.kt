@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,9 +23,25 @@ import com.example.cupcake.ui.state.OrderUiState
 @Composable
 fun SummaryScreen(
     data: OrderUiState,
+    onShareClicked: (String, String) -> Unit,
     onCancelClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val resources = LocalContext.current.resources
+    val numberOfCupcakes = resources.getQuantityString(
+        R.plurals.cupcakes,
+        data.quantity,
+        data.quantity
+    )
+    val newOrder = stringResource(id = R.string.new_cupcake_order)
+    val orderDetail = stringResource(
+        id = R.string.order_details,
+        numberOfCupcakes,
+        data.flavor,
+        data.pickupDate,
+        data.quantity,
+    )
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -44,7 +61,9 @@ fun SummaryScreen(
         )
         SubTotalComponent(total = data.price, modifier = Modifier.align(Alignment.End))
         Button(
-            onClick = { },
+            onClick = {
+                onShareClicked(newOrder, orderDetail)
+            },
             modifier = Modifier
                 .padding(start = 5.dp, end = 5.dp)
                 .fillMaxWidth()

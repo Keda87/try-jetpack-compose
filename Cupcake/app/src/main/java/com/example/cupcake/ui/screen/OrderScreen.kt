@@ -1,6 +1,5 @@
 package com.example.cupcake.ui.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ButtonDefaults
@@ -10,7 +9,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,8 +20,6 @@ fun OrderScreen(
     quantityOptions: List<Pair<Int, Int>>,
     modifier: Modifier = Modifier
 ) {
-    val ctx = LocalContext.current
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -45,8 +41,6 @@ fun OrderScreen(
             ButtonQuantity(
                 onClick = {
                     onClick(it.second)
-
-                    Toast.makeText(ctx, String.format("%d", it.second), Toast.LENGTH_SHORT).show()
                 },
                 label = stringResource(id = it.first)
             )
