@@ -1,9 +1,12 @@
 package com.example.racetracker.data
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
+import kotlin.math.max
 
 class RaceParticipant(
     val name: String,
@@ -22,9 +25,19 @@ class RaceParticipant(
         private set
 
     suspend fun run() {
-        while (currentProgress < maxProgress) {
-            delay(progressDelayMilis)
-            currentProgress += progressIncrement
+        try {
+            while (currentProgress < maxProgress) {
+                delay(progressDelayMilis)
+                currentProgress += progressIncrement
+            }
+
+            if (currentProgress > maxProgress) {
+                currentProgress = maxProgress
+            }
+
+        } catch (e: CancellationException) {
+            Log.e("RaceParticipant", "$name: ${e.message}")
+            throw e // Always re-throw CancellationException.
         }
     }
 

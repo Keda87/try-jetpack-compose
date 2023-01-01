@@ -17,22 +17,26 @@ import androidx.compose.ui.unit.dp
 import com.example.racetracker.R
 import com.example.racetracker.data.RaceParticipant
 import com.example.racetracker.data.progressFactor
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun RaceTrackerApp(modifier: Modifier = Modifier) {
     var raceInProgress by remember { mutableStateOf(false) }
     val playerOne = remember {
-        RaceParticipant(name = "Player 1", progressIncrement = 1)
+        RaceParticipant(name = "Player 1", progressIncrement = 4)
     }
     val playerTwo = remember {
-        RaceParticipant(name = "Player 2", progressIncrement = 2)
+        RaceParticipant(name = "Player 2", progressIncrement = 9)
     }
 
     if (raceInProgress) {
         LaunchedEffect(playerOne, playerTwo) {
-            playerOne.run()
-            playerTwo.run()
+            coroutineScope {
+                launch { playerOne.run() }
+                launch { playerTwo.run() }
+            }
             raceInProgress = false
         }
     }
