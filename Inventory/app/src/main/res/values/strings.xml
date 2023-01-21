@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Inventory</string>
+    <string name="txt_item">Item</string>
+    <string name="txt_price">Price</string>
+    <string name="txt_qty">Quantity In Stock</string>
+    <string name="label_item_name">Item Name *</string>
+    <string name="label_item_price">Item Price *</string>
+    <string name="label_item_qty">Quantity in Stock *</string>
+    <string name="label_no_item">No items in the inventory</string>
+</resources>
