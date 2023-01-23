@@ -7,4 +7,7 @@
     <string name="label_item_price">Item Price *</string>
     <string name="label_item_qty">Quantity in Stock *</string>
     <string name="label_no_item">No items in the inventory</string>
+    <string name="label_button_save">Save</string>
+    <string name="label_create_top_bar">Add Item</string>
+    <string name="back_button">Back</string>
 </resources>
