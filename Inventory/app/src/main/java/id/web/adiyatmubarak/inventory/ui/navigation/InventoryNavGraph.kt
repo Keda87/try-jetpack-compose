@@ -3,12 +3,11 @@ package id.web.adiyatmubarak.inventory.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import id.web.adiyatmubarak.inventory.ui.screen.CreateItemDestination
-import id.web.adiyatmubarak.inventory.ui.screen.CreateItemScreen
-import id.web.adiyatmubarak.inventory.ui.screen.HomeDestination
-import id.web.adiyatmubarak.inventory.ui.screen.HomeScreen
+import androidx.navigation.navArgument
+import id.web.adiyatmubarak.inventory.ui.screen.*
 
 
 @Composable
@@ -21,8 +20,12 @@ fun InventoryNavHost(navController: NavHostController, modifier: Modifier = Modi
 
         composable(route = HomeDestination.route) {
             HomeScreen(
-                navigateToCreateScreen = { navController.navigate(CreateItemDestination.route) },
-                navigateToUpdateScreen = {},
+                navigateToCreateScreen = {
+                    navController.navigate(CreateItemDestination.route)
+                },
+                navigateToDetailScreen = {
+                    navController.navigate("${DetailItemDestination.route}/${it}")
+                },
             )
         }
 
@@ -33,9 +36,17 @@ fun InventoryNavHost(navController: NavHostController, modifier: Modifier = Modi
             )
         }
 
-//        composable(route = "") {
-//
-//        }
+        composable(
+            route = DetailItemDestination.routeWithArgs,
+            arguments = listOf(navArgument(DetailItemDestination.itemIdArg){
+                type = NavType.IntType
+            })
+        ) {
+            DetailItemScreen(
+                onNavigateBack = { navController.navigateUp() },
+                onNavigateUp = {}
+            )
+        }
 //
 //        composable(route = "") {
 //

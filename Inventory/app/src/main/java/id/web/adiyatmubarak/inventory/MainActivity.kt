@@ -69,7 +69,7 @@ fun DefaultPreview() {
     InventoryTheme {
         HomeScreen(
             navigateToCreateScreen = {},
-            navigateToUpdateScreen = {},
+            navigateToDetailScreen = {},
         )
     }
 }

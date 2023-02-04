@@ -1,5 +1,6 @@
 package id.web.adiyatmubarak.inventory.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,7 +30,7 @@ object HomeDestination : NavigationDestination {
 @Composable
 fun HomeScreen(
     navigateToCreateScreen: () -> Unit,
-    navigateToUpdateScreen: () -> Unit,
+    navigateToDetailScreen: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -58,7 +59,7 @@ fun HomeScreen(
                     .padding(innerPad)
                     .fillMaxHeight()
             ) {
-                HomeComponent(entries = homeUiState.itemList)
+                HomeComponent(entries = homeUiState.itemList, onItemClicked = navigateToDetailScreen)
             }
         },
     )
@@ -67,6 +68,7 @@ fun HomeScreen(
 @Composable
 fun HomeComponent(
     entries: List<Item>,
+    onItemClicked: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.padding(15.dp)) {
@@ -96,7 +98,7 @@ fun HomeComponent(
         )
 
         if (entries.isNotEmpty()) {
-            ListUi(entries = entries)
+            ListUi(entries = entries, onItemClicked = { onItemClicked(it.id) })
         } else {
             Text(
                 text = stringResource(id = R.string.label_no_item),
@@ -109,19 +111,24 @@ fun HomeComponent(
 @Composable
 fun ListUi(
     entries: List<Item>,
+    onItemClicked: (Item) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(5.dp)) {
         items(items = entries, key = { it.id }) { item ->
-            InventoryItem(data = item)
+            InventoryItem(data = item, onItemClicked = onItemClicked)
             Divider()
         }
     }
 }
 
 @Composable
-fun InventoryItem(data: Item, modifier: Modifier = Modifier) {
-    Row(modifier = modifier.padding(8.dp)) {
+fun InventoryItem(
+    data: Item,
+    onItemClicked: (Item) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier.padding(8.dp).clickable { onItemClicked(data) }) {
         Text(
             text = data.name,
             modifier = Modifier.weight(1.5f)

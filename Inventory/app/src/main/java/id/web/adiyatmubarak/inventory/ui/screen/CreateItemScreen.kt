@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.web.adiyatmubarak.inventory.InventoryTopAppBar
 import id.web.adiyatmubarak.inventory.R
@@ -59,7 +61,7 @@ fun CreateItemScreen(
                         onNavigateBack()
                     }
                 },
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier.fillMaxWidth().padding(start = 15.dp, end = 15.dp)
             ) {
                 Text(text = stringResource(id = R.string.label_button_save))
             }
@@ -74,7 +76,7 @@ fun InputForm(
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(modifier = modifier.padding(15.dp)) {
         OutlinedTextField(
             value = itemDetails.name,
             onValueChange = { onValueChange(itemDetails.copy(name = it)) },
@@ -82,6 +84,7 @@ fun InputForm(
             singleLine = true,
             enabled = enabled,
             modifier = modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next)
         )
 
         OutlinedTextField(
@@ -91,7 +94,7 @@ fun InputForm(
             singleLine = true,
             enabled = enabled,
             modifier = modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
             label = { Text(text = stringResource(id = R.string.label_item_price)) },
         )
 
@@ -99,7 +102,7 @@ fun InputForm(
             value = itemDetails.quantity,
             onValueChange = { onValueChange(itemDetails.copy(quantity = it)) },
             label = { Text(text = stringResource(id = R.string.label_item_qty)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
             singleLine = true,
             enabled = enabled,
             modifier = modifier.fillMaxWidth()
